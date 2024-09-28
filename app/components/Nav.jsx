@@ -15,22 +15,20 @@ const Nav = () => {
 
   const handleLogout = () => {
     axios.post('https://aipcrepair.onrender.com/apis/logout/', {}, {
-      headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,  // Adjust based on your storage
-      }
-  })
-  .then(response => {
-    logout();
-    router.push('/auth/login'); 
-      
-  })
-  .catch(error => {
-      console.error('Logout failed:', error.response.data);
-  });
-  
-    
-    // Optionally redirect to login page
-  };
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`, // Adjust based on your storage
+        }
+    })
+    .then(response => {
+        // Call the logout function to handle local state changes
+        logout(); 
+        // Redirect to login page
+        router.push('/auth/login'); 
+    })
+    .catch(error => {
+        console.error('Logout failed:', error.response ? error.response.data : error.message);
+    });
+};
 
   return (
     <nav className="bg-transparent p-4 backdrop-blur-md shadow-md">
