@@ -49,7 +49,8 @@ const SignupPage = () => {
           
           if (response.ok) {
             const result = await response.json();
-            setSuccess(result.message); // Update message based on the result
+            setSuccess(result.message);
+            alert("Please check your email for email verification") // Update message based on the result
             router.push('/auth/login')
             // Optionally clear the form or redirect to login
             setEmail('');
