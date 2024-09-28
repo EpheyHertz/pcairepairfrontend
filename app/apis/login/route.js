@@ -26,7 +26,7 @@ export async function POST(req) {
     }
   } catch (error) {
     console.error(error); // Log the error for debugging
-    const message = error.response?.data?.message || "An unexpected error occurred.";
+    const message = error.response?.data?.message || "An unexpected error occurred.Please try again later.Make sure your email is authenticated or check your email to verify";
     return new Response(JSON.stringify({ message }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
