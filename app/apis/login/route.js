@@ -19,7 +19,7 @@ export async function POST(req) {
         headers: { 'Content-Type': 'application/json' },
       });
     } else {
-      return new Response(JSON.stringify({ message: "An error occurred. Please try again later." }), {
+      return new Response(JSON.stringify({ message: "An error occurred. Please try again later.Make sure your email is authenticated or check your email to verify" }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
