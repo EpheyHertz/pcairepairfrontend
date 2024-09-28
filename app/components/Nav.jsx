@@ -14,8 +14,21 @@ const Nav = () => {
   };
 
   const handleLogout = () => {
+    axios.post('https://aipcrepair.onrender.com/apis/logout/', {}, {
+      headers: {
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,  // Adjust based on your storage
+      }
+  })
+  .then(response => {
     logout();
     router.push('/auth/login'); 
+      
+  })
+  .catch(error => {
+      console.error('Logout failed:', error.response.data);
+  });
+  
+    
     // Optionally redirect to login page
   };
 
