@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children }) => {
       // Ensure that localStorage is available in the browser
       const checkTokenValidity = async () => {
         const accessToken = localStorage.getItem('accessToken');
-        console.log(accessToken); // Check the token value
+        // console.log(accessToken); // Check the token value
 
         if (!accessToken) {
           // If no access token, redirect to login page
