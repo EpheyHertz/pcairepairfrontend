@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
