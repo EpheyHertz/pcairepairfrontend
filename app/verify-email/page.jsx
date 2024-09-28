@@ -68,7 +68,7 @@ const EmailVerification = () => {
             
                 // Redirect to login after successful verification
                 setTimeout(() => {
-                    router.push('/login');
+                    router.push('/auth/login');
                 }, 3000);
             })
             .catch((error) => {
