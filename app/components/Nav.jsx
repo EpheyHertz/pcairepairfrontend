@@ -78,7 +78,7 @@ const Nav = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-[#1e3a8a] rounded-md">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-start">
-            <Link href="/" className="text-white hover:text-blue-300 transition duration-200">Home</Link>
+            {/* <Link href="/" className="text-white hover:text-blue-300 transition duration-200">Home</Link> */}
             {!isAuthenticated ? (
               <>
                 <Link href="/auth/signup" className="text-white hover:text-blue-300 transition duration-200">Sign Up</Link>

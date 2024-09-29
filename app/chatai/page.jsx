@@ -391,21 +391,30 @@ const ChatPage = () => {
   // };
   
   const deleteChat = async (chatId) => {
-    try {
-      const accessToken = localStorage.getItem('accessToken');
-      await axios.delete(`https://aipcrepair.onrender.com/apis/chats/delete/${chatId}/`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      localStorage.removeItem('chatId')
-      alert('Chat deleted successfully');
-      // Optionally, update the chat list in the frontend after deletion
-    } catch (error) {
-      console.error('Failed to delete chat:', error);
-      alert('Failed to delete chat');
+    // Ask for confirmation before deleting the chat
+    const confirmDelete = window.confirm('Are you sure you want to delete this chat?');
+  
+    if (confirmDelete) {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        await axios.delete(`https://aipcrepair.onrender.com/apis/chats/delete/${chatId}/`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        localStorage.removeItem('chatId');
+        alert('Chat deleted successfully');
+        // Optionally, update the chat list in the frontend after deletion
+      } catch (error) {
+        console.error('Failed to delete chat:', error);
+        alert('Failed to delete chat');
+      }
+    } else {
+      // If user cancels the deletion
+      alert('Chat deletion cancelled');
     }
   };
+  
   
   // const deleteChat = async (chatId) => {
   //   try {
@@ -536,45 +545,51 @@ const ChatPage = () => {
         </div>
 
         {/* Chat input area */}
-        <div className="mt-4 flex items-center p-3 rounded-lg shadow-md relative">
-          {selectedChat && selectedChat.length > 0 && (
-            <button onClick={startNewChat} className="text-red-500 hover:text-red-700 p-2">
-              <FiX size={24} />
-            </button>
-          )}
-
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type a message..."
-            className={`flex-1 p-2 rounded-lg focus:outline-none mr-2 ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'}`}
-          />
-
-          <button onClick={() => fileInputRef.current.click()} className="text-blue-500 hover:text-blue-700 p-2">
-            <FiImage size={24} />
-          </button>
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            accept="image/*"
-            onChange={(e) => setSelectedImage(e.target.files[0])}
-          />
-
-          <button
-            onClick={sendMessage}
-            disabled={isSending}
-            className="bg-blue-500 hover:bg-blue-700 text-white rounded-lg p-2 ml-2 disabled:bg-blue-300"
-          >
-            <FiSend size={24} />
-          </button>
-           {/* Theme Toggle Button */}
-    <button onClick={toggleTheme} className="ml-2 p-2 rounded-full">
-      {theme === 'light' ? <FiMoon size={24} className='text-black' /> : <FiSun size={24} />}
+        <div className="mt-4 flex flex-wrap items-center p-3 rounded-lg shadow-md relative">
+  {selectedChat && selectedChat.length > 0 && (
+    <button onClick={startNewChat} className="text-red-500 hover:text-red-700 p-2">
+      <FiX size={24} />
     </button>
+  )}
 
-        </div>
+  {/* Textarea that expands as user types */}
+  <textarea
+    value={message}
+    onChange={(e) => {
+      setMessage(e.target.value);
+      e.target.style.height = 'auto'; // Reset the height
+      e.target.style.height = `${e.target.scrollHeight}px`; // Set it to the scroll height to expand
+    }}
+    placeholder="Type a message..."
+    className={`flex-1 p-2 rounded-lg focus:outline-none mr-2 w-full md:w-auto resize-none overflow-hidden ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'}`}
+    rows="1"
+  />
+
+  <button onClick={() => fileInputRef.current.click()} className="text-blue-500 hover:text-blue-700 p-2">
+    <FiImage size={24} />
+  </button>
+  <input
+    type="file"
+    ref={fileInputRef}
+    style={{ display: 'none' }}
+    accept="image/*"
+    onChange={(e) => setSelectedImage(e.target.files[0])}
+  />
+
+  <button
+    onClick={sendMessage}
+    disabled={isSending}
+    className="bg-blue-500 hover:bg-blue-700 text-white rounded-lg p-2 ml-2 disabled:bg-blue-300"
+  >
+    <FiSend size={24} />
+  </button>
+
+  {/* Theme Toggle Button */}
+  <button onClick={toggleTheme} className="ml-2 p-2 rounded-full">
+    {theme === 'light' ? <FiMoon size={24} className="text-black" /> : <FiSun size={24} />}
+  </button>
+</div>
+
       </main>
     </div>
     </ProtectedRoute>

@@ -72,7 +72,7 @@ const EmailVerification = () => {
                 }, 3000);
             })
             .catch((error) => {
-                console.log(error);
+                // console.log(error);
                 setVerificationStatus('error');
                 setLoading(false);
             
@@ -87,7 +87,7 @@ const EmailVerification = () => {
 
     if (loading) {
         // Fallback during loading
-        return <p>Verifying your email...</p>;
+        return <p className='text-white'>Verifying your email...</p>;
     }
 
     return (
