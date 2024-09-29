@@ -81,6 +81,7 @@ const Nav = () => {
             {/* <Link href="/" className="text-white hover:text-blue-300 transition duration-200">Home</Link> */}
             {!isAuthenticated ? (
               <>
+                <Link href="/" className="text-white hover:text-blue-300 transition duration-200">Home</Link>
                 <Link href="/auth/signup" className="text-white hover:text-blue-300 transition duration-200">Sign Up</Link>
                 <Link href="/auth/login" className="text-white hover:text-blue-300 transition duration-200">Log In</Link>
               </>
