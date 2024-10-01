@@ -52,6 +52,7 @@ const Nav = () => {
               <Link href="/updateprofile" className="text-white hover:text-blue-300 transition duration-200">Update Profile</Link>
               <Link href="/talktous" className="text-white hover:text-blue-300 transition duration-200">Talk To Us</Link>
               <Link href="/chatai" className="text-white hover:text-blue-300 transition duration-200">Chat with AI</Link>
+              <Link href="/latestnews" className="text-white hover:text-blue-300 transition duration-200">Tech News</Link>
               <button onClick={handleLogout} className="text-white hover:text-blue-300 transition duration-200">Logout</button>
             </>
           )}
@@ -91,6 +92,7 @@ const Nav = () => {
                 <Link href="/updateprofile" className="text-white hover:text-blue-300 transition duration-200">Update Profile</Link>
                 <Link href="/talktous" className="text-white hover:text-blue-300 transition duration-200">Talk to Us</Link>
                 <Link href="/chatai" className="text-white hover:text-blue-300 transition duration-200">Chat with AI</Link>
+                <Link href="/latestnews" className="text-white hover:text-blue-300 transition duration-200">Tech News</Link>
                 <button onClick={handleLogout} className="text-white hover:text-blue-300 transition duration-200">Logout</button>
               </>
             )}
