@@ -15,7 +15,7 @@ const NewsPage = () => {
     fetchNews();
   });
 
-  const fetchNews = async (page) => {
+  const fetchNews = async () => {
 
     const token = localStorage.getItem('accessToken');
     try {
@@ -24,6 +24,7 @@ const NewsPage = () => {
           'Authorization': `Bearer ${token}` // Send the token in the request header
         }
       });
+      // console.log(res.data)
       const newArticles = res.data || [];
 
       // Filter out articles with removed content
@@ -95,25 +96,26 @@ const NewsPage = () => {
       </div>
     );
   }
-
   return (
     <ProtectedRoute>
-    <div style={newsPageStyle}>
+    <div style={newsPageStyle} className='rounded-3xl shadow-lg'>
     <h1 style={headingStyle}>Latest News</h1>
     <div style={newsGridStyle}>
       {news.length > 0 ? (
         news.map((article, index) => (
           <div key={index} style={newsCardStyle}>
             <img 
-              src={article.urlToImage || '../images/technews.jpg'} 
+              src={article.image_url || '/images/technews.jpg'} 
               alt={article.title || 'No image available'} 
               style={newsImageStyle} 
             />
             <h2 style={newsTitleStyle}>{article.title || 'Title not available'}</h2>
+            <p style={newsDescriptionStyle}>{article.snippet || 'Snippet not available'}</p>
             <p style={newsDescriptionStyle}>{article.description || 'Description not available'}</p>
+            <p style={newsDescriptionStyle}>{article.keywords || 'Keywords not available'}</p>
             <p style={newsMetaStyle}>
-              <strong>By: {article.author || 'Unknown'}</strong> |{' '}
-              <span>{formatDate(article.publishedAt)}</span>
+              <strong>By: {article.author || article.source}</strong> |{' '}
+              <span>{formatDate(article.published_at)}</span>
             </p>
             <a href={article.url} target="_blank" rel="noopener noreferrer" style={readMoreStyle}>
               Read more &rarr;
@@ -121,7 +123,7 @@ const NewsPage = () => {
           </div>
         ))
       ) : (
-        <p>No valid news articles found.</p>
+        <p className='text-white'>No valid news articles found.</p>
       )}
     </div>
 
@@ -146,17 +148,24 @@ export default NewsPage;
 
 const newsPageStyle = {
   padding: '20px',
-  backgroundImage: 'url("../images/technews3.png")',
-  minHeight: '100vh',
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
+  backgroundImage: 'url("/images/technews3.jpg")',
+  backgroundSize: 'cover',
+            // Ensures the image covers the whole background
+  backgroundPosition: 'center',     // Centers the background image
+  backgroundRepeat: 'no-repeat',    // Prevents repeating the image
+  minHeight: '100vh',               // Ensures the section covers the entire viewport height
+  width: '100%',                    // Makes the section full width
+  display: 'flex',                  // Flexbox to center content
+  flexDirection: 'column',          // Align content vertically
+  alignItems: 'center',             // Horizontally center content
+  justifyContent: 'center',         // Vertically center content
+  textAlign: 'center',              // Centers text in the content
 };
+
 
 const headingStyle = {
   fontSize: '32px',
-  color: '#333',
+  color: 'white',
   textAlign: 'center',
   marginBottom: '30px',
   fontWeight: 'bold',
