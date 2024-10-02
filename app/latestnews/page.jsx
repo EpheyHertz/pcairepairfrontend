@@ -105,7 +105,7 @@ const NewsPage = () => {
         news.map((article, index) => (
           <div key={index} style={newsCardStyle}>
             <img 
-              src={article.image_url || '/images/technews.jpg'} 
+              src={article.image_url || article.urlToImage || '/images/technews.jpg'} 
               alt={article.title || 'No image available'} 
               style={newsImageStyle} 
             />
@@ -115,7 +115,8 @@ const NewsPage = () => {
             <p style={newsDescriptionStyle}>{article.keywords || 'Keywords not available'}</p>
             <p style={newsMetaStyle}>
               <strong>By: {article.author || article.source}</strong> |{' '}
-              <span>{formatDate(article.published_at)}</span>
+              <strong>From: {article.source || article.author}</strong> |{' '}
+              <span>{formatDate(article.published_at) || formatDate(article.publishedAt)}</span>
             </p>
             <a href={article.url} target="_blank" rel="noopener noreferrer" style={readMoreStyle}>
               Read more &rarr;
