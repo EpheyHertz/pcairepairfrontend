@@ -32,7 +32,7 @@ const Nav = () => {
 };
 
   return (
-    <nav className="bg-transparent p-4 backdrop-blur-md shadow-md">
+    <nav className="bg-transparent p-4 backdrop-blur-md shadow-md bg-blue-600">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 flex justify-between items-center">
         <div className="flex-shrink-0">
           <Link href="/" className="text-white font-bold text-xl">Doctech</Link>

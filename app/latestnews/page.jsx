@@ -98,7 +98,7 @@ const NewsPage = () => {
   }
   return (
     <ProtectedRoute>
-    <div style={newsPageStyle} className='rounded-3xl shadow-lg'>
+    <div style={newsPageStyle} className='rounded-3xl shadow-lg overflow-x-clip'>
     <h1 style={headingStyle}>Latest News</h1>
     <div style={newsGridStyle}>
       {news.length > 0 ? (
@@ -114,8 +114,8 @@ const NewsPage = () => {
             <p style={newsDescriptionStyle}>{article.description || 'Description not available'}</p>
             <p style={newsDescriptionStyle}>{article.keywords || 'Keywords not available'}</p>
             <p style={newsMetaStyle}>
-              <strong>By: {article.author || article.source}</strong> |{' '}
-              <strong>From: {article.source || article.author}</strong> |{' '}
+              <strong>By: {article.author || article.source__name}</strong> |{' '}
+              <strong>From: {article.source__name}</strong> |{' '}
               <span>{formatDate(article.published_at) || formatDate(article.publishedAt)}</span>
             </p>
             <a href={article.url} target="_blank" rel="noopener noreferrer" style={readMoreStyle}>

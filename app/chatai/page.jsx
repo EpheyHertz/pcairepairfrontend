@@ -454,7 +454,7 @@ const ChatPage = () => {
 
   return (
     <ProtectedRoute>
-    <div className={`flex flex-col h-screen lg:flex-row ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
+    <div className={`flex flex-col h-screen  lg:flex-row ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
       {/* Left Side (Chat History) */}
       <aside
         className={`p-4 lg:w-64 flex-shrink-0 transition-all duration-300 ease-in-out ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'} ${
