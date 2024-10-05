@@ -24,16 +24,17 @@ export default function RootLayout({ children }) {
         <TokenRefresher />
   
         {/* Navbar fixed at the top */}
-        <header className="bg-blue-600 z-1000">
+        <header className="bg-blue-600 z-20">
            <Navbar />
         </header>
             
           
         {/* Main content area with proper padding to avoid overlap with the fixed navbar */}
-        <main className="flex-grow container mt-6 mb-10 pt-16 px-6"> {/* Adjust the top margin as necessary */}
+        <main className="flex-grow container mb-6 mt-20 flex items-center justify-center">
+          {/* Adjust the top margin as necessary */}
           {children}
         </main>
-  
+          
         {/* Footer at the bottom, below the content */}
         <footer className="bg-gray-800 text-white py-4">
           <Footer />

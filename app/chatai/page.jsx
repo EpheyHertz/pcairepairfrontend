@@ -458,7 +458,7 @@ const ChatPage = () => {
       {/* Left Side (Chat History) */}
       <aside
         className={`p-4 lg:w-64 flex-shrink-0 transition-all duration-300 ease-in-out ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'} ${
-          isMobile ? (showHistory ? 'absolute inset-0 w-full z-10' : 'hidden') : 'block'
+          isMobile ? (showHistory ? 'absolute inset-0 mt-20 w-full z-10' : 'hidden') : 'block'
         }`}
       >
         <div className="flex justify-between items-center mb-4">
@@ -508,7 +508,7 @@ const ChatPage = () => {
         {isMobile && !showHistory && (
           <button
             onClick={() => setShowHistory(true)}
-            className="absolute top-4 left-4 bg-gray-700 p-2 rounded-full shadow-lg hover:bg-gray-600 lg:hidden"
+            className="absolute top-4 left-4 bg-gray-700 p-2 rounded-full shadow-lg hover:bg-gray-600  lg:hidden"
           >
             <FiMenu size={24} />
           </button>

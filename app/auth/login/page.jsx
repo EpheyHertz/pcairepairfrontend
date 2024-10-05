@@ -58,7 +58,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-transparent relative flex items-center justify-center align-middle mb-10 mt-10 rounded-3xl"style={{ backgroundImage: 'url("../images/signuplogin.png")' }}>
+    <div className="min-h-screen bg-transparent relative flex items-center justify-center align-middle mb-10 mt-30 rounded-3xl "style={{ backgroundImage: 'url("../images/signuplogin.png")' }}>
       <div className="absolute inset-0 bg-cover bg-center rounded-3xl align-middle " >
         <div className="bg-black bg-opacity-50 h-full w-full" /> {/* Overlay for readability */}
       </div>

@@ -67,7 +67,7 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-transparent relative flex items-center justify-center rounded-3xl mb-10 mt-10">
+    <div className="min-h-screen bg-transparent relative flex items-center justify-center rounded-3xl mb-10 mt-10 ">
       <div className="absolute inset-0 bg-cover bg-center  rounded-3xl" style={{ backgroundImage: 'url("../images/signuplogin.png")' }}>
         <div className="bg-black bg-opacity-50 h-full w-full" /> {/* Overlay for readability */}
       </div>
