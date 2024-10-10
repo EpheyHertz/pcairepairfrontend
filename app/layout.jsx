@@ -30,11 +30,10 @@ export default function RootLayout({ children }) {
             
           
         {/* Main content area with proper padding to avoid overlap with the fixed navbar */}
-        <main className="flex-grow container mb-6 mt-20 flex items-center justify-center">
-          {/* Adjust the top margin as necessary */}
+        <main className="flex-grow container mb-6 mt-20 flex items-center justify-center min-h-screen">
           {children}
         </main>
-          
+
         {/* Footer at the bottom, below the content */}
         <footer className="bg-gray-800 text-white py-4">
           <Footer />

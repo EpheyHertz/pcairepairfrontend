@@ -43,11 +43,13 @@ const Nav = () => {
           {!isAuthenticated ? (
             <>
               <Link href="/" className="text-white hover:text-blue-300 transition duration-200">Home</Link>
+              <Link href="https://doctechcommunity.onrender.com" className="text-white hover:text-blue-300 transition duration-200">Join Community</Link>
               <Link href="/auth/signup" className="text-white hover:text-blue-300 transition duration-200">Signup</Link>
               <Link href="/auth/login" className="text-white hover:text-blue-300 transition duration-200">Login</Link>
             </>
           ) : (
             <>
+             <Link href="https://doctechcommunity.onrender.com" className="text-white hover:text-blue-300 transition duration-200">Join Community</Link>
               <Link href="/profile" className="text-white hover:text-blue-300 transition duration-200">Profile</Link>
               <Link href="/updateprofile" className="text-white hover:text-blue-300 transition duration-200">Update Profile</Link>
               <Link href="/talktous" className="text-white hover:text-blue-300 transition duration-200">Talk To Us</Link>
@@ -83,11 +85,13 @@ const Nav = () => {
             {!isAuthenticated ? (
               <>
                 <Link href="/" className="text-white hover:text-blue-300 transition duration-200">Home</Link>
+                <Link href="/community" className="text-white hover:text-blue-300 transition duration-200">Community</Link>
                 <Link href="/auth/signup" className="text-white hover:text-blue-300 transition duration-200">Sign Up</Link>
                 <Link href="/auth/login" className="text-white hover:text-blue-300 transition duration-200">Log In</Link>
               </>
             ) : (
               <>
+                <Link href="/community" className="text-white hover:text-blue-300 transition duration-200">Community</Link>
                 <Link href="/profile" className="text-white hover:text-blue-300 transition duration-200">Profile</Link>
                 <Link href="/updateprofile" className="text-white hover:text-blue-300 transition duration-200">Update Profile</Link>
                 <Link href="/talktous" className="text-white hover:text-blue-300 transition duration-200">Talk to Us</Link>
