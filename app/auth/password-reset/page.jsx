@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import axios from 'axios';
+import Link from 'next/link'
 
 const PasswordResetRequest = () => {
   const [email, setEmail] = useState('');
@@ -56,6 +57,12 @@ const PasswordResetRequest = () => {
             {loading ? 'Sending...' : 'Send Reset Link'}  {/* Show 'Sending...' while loading */}
           </button>
         </form>
+        <p>
+            By registering With us you agree to our
+          <Link href="https://epheyhertz.github.io/doctechprivacyandterms/" className="text-blue-400 hover:underline ml-2">
+             Terms and Policy
+          </Link>
+          </p>
       </div>
     </div>
   );

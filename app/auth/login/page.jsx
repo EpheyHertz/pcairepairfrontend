@@ -125,6 +125,12 @@ const LoginPage = () => {
             Don&apos;t have an account?{' '}
             <Link href="/auth/signup" className="text-blue-400 hover:underline">Sign Up</Link>
           </p>
+          <p>
+            By registering With us you agree to our
+          <Link href="https://epheyhertz.github.io/doctechprivacyandterms/" className="text-blue-400 hover:underline ml-2">
+             Terms and Policy
+          </Link>
+          </p>
         </div>
       </div>
     </div>
