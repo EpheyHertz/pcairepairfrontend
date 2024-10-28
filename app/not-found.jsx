@@ -7,7 +7,7 @@ const Custom404 = () => {
       <h1 className="text-8xl font-extrabold text-blue-700">404</h1>
       <h2 className="mt-4 text-3xl font-semibold text-gray-800">Oops! Page not found</h2>
       <p className="mt-3 max-w-md mx-auto text-lg text-gray-600">
-        Sorry, the page you are looking for does not exist. It might have been removed, or you may have entered the wrong URL.
+        Sorry, the page you are looking for does not exist. It might have been removed, or you may have entered the wrong URL.IF the problem persist contact us Below.
       </p>
       <div className="mt-8 space-x-4">
         <Link 
