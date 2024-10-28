@@ -1,11 +1,12 @@
 'use client';
 import { useEffect } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const TokenRefresher = () => {
   useEffect(() => {
     const refreshAccessToken = async () => {
-      const refreshToken = localStorage.getItem('refreshToken');
+      const refreshToken = Cookies.get('refreshToken');
 
       if (!refreshToken) {
         return; // No refresh token available
@@ -18,13 +19,13 @@ const TokenRefresher = () => {
 
         const { access, refresh } = response.data;
 
-        // Update local storage with new access token
-        localStorage.setItem('accessToken', access);
-        localStorage.setItem('refreshToken', refresh);
+        // Update cookies with new tokens
+        Cookies.set('accessToken', access, { path: '/' });
+        Cookies.set('refreshToken', refresh, { path: '/' });
 
-        // Update the expiration time
-        const expirationTime = Date.now() + (4 * 60 * 1000); // Set expiration to 4 minutes from now
-        localStorage.setItem('tokenExpiration', expirationTime.toString());
+        // Update the expiration time in a cookie
+        const expirationTime = Date.now() + 4 * 60 * 1000; // Set expiration to 4 minutes from now
+        Cookies.set('tokenExpiration', expirationTime.toString(), { path: '/' });
 
       } catch (error) {
         console.error('Error refreshing token:', error);
@@ -32,11 +33,11 @@ const TokenRefresher = () => {
     };
 
     const checkAndRefreshToken = () => {
-      const expirationTime = localStorage.getItem('tokenExpiration');
+      const expirationTime = Cookies.get('tokenExpiration');
       const currentTime = Date.now();
 
       // Check if the token will expire in 5 minutes or less
-      if (expirationTime && (parseInt(expirationTime) - currentTime) <= (5 * 60 * 1000)) {
+      if (expirationTime && parseInt(expirationTime) - currentTime <= 5 * 60 * 1000) {
         refreshAccessToken();
       }
     };

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,11 +14,11 @@ const Nav = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
+  const accessToken = Cookies.get('accessToken');
   const handleLogout = () => {
     axios.post('https://aipcrepair.onrender.com/apis/logout/', {}, {
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`, // Adjust based on your storage
+            'Authorization': `Bearer ${accessToken}`, // Adjust based on your storage
         }
     })
     .then(response => {

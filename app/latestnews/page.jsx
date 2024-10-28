@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { throttle } from 'lodash';
-
+import Cookies from 'js-cookie'
 const NewsPage = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ const NewsPage = () => {
 
   // Memoize fetchNews function using useCallback
   const fetchNews = useCallback(async (page) => {
-    const token = localStorage.getItem('accessToken');
+    const token = Cookies.get('accessToken');
     setLoadingMore(true); // Set loadingMore to true when fetching
     setArticlesRendering(true);
     try {

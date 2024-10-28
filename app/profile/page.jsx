@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import ProtectedRoute from '../components/ProtectedRoute';
 import axios from 'axios';
-
+import Cookies from 'js-cookie';
 const Profile = () => {
   const [userData, setUserData] = useState({});
   const [chats, setChats] = useState([]);
@@ -12,9 +12,10 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        const accessToken = Cookies.get('accessToken')
         const response = await axios.get('https://aipcrepair.onrender.com/apis/profile/', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
         setUserData(response.data);
@@ -27,9 +28,10 @@ const Profile = () => {
 
     const fetchChats = async () => {
       try {
+        const accessToken = Cookies.get('accessToken')
         const response = await axios.get('https://aipcrepair.onrender.com/apis/user/chats/', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
         setChats(response.data);

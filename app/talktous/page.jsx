@@ -2,18 +2,19 @@
 import React, { useEffect, useState } from 'react';
 import ProtectedRoute from '../components/ProtectedRoute';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const TalkToUs = () => {
   const [userData, setUserData] = useState({});
   const [message, setMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
-
+  const accessToken = Cookies.get('accessToken')
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get('https://aipcrepair.onrender.com/apis/profile/', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
         setUserData(response.data);
@@ -23,18 +24,19 @@ const TalkToUs = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [accessToken]);
 
   const handleSendMessage = async () => {
     setIsSending(true);
     try {
+      const accessToken = Cookies.get('accessToken')
       await axios.post('https://aipcrepair.onrender.com/apis/contact-us/', {
         email: userData.email,
         full_name: userData.fullname,
         message,
       }, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       alert('Message sent successfully!');

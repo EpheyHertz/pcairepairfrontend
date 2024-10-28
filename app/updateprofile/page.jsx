@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import ProtectedRoute from '../components/ProtectedRoute';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const Profile = () => {
   const [userData, setUserData] = useState({});
@@ -13,13 +14,13 @@ const Profile = () => {
   const [fullname, setFullname] = useState('');
   const [about, setAbout] = useState('');
   const [file, setFile] = useState(null);
-
+  const accessToken = Cookies.get('accessToken')
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get('https://aipcrepair.onrender.com/apis/profile/', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
         setUserData(response.data);
@@ -37,7 +38,7 @@ const Profile = () => {
       try {
         const response = await axios.get('https://aipcrepair.onrender.com/apis/user/chats/', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
         setChats(response.data);
@@ -50,7 +51,7 @@ const Profile = () => {
 
     fetchUserData();
     fetchChats();
-  }, []);
+  }, [accessToken]);
 
   const handleUpdate = async () => {
     setIsUpdating(true);
@@ -65,7 +66,7 @@ const Profile = () => {
     try {
       await axios.put('https://aipcrepair.onrender.com/apis/profile/', formData, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'multipart/form-data',
         },
       });
@@ -76,7 +77,7 @@ const Profile = () => {
       setAbout('');
       const response = await axios.get('https://aipcrepair.onrender.com/apis/profile/', {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       setUserData(response.data);

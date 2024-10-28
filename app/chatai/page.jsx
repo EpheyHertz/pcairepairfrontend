@@ -1,5 +1,8 @@
 
 
+
+
+
 // export default ChatPage;
 'use client';
 import { useState, useEffect, useRef } from 'react';
@@ -7,6 +10,9 @@ import { FiSend, FiImage, FiX, FiMenu, FiSun, FiMoon, FiTrash } from 'react-icon
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import ProtectedRoute from '../components/ProtectedRoute';
+import Cookies from 'js-cookie';
+import 'animate.css';
+
 
 const ChatPage = () => {
   const [message, setMessage] = useState('');
@@ -19,7 +25,8 @@ const ChatPage = () => {
   const [chatId, setChatId] = useState(null);
   const [theme, setTheme] = useState('light');
   const fileInputRef = useRef(null); 
-
+const chatEndRef = useRef(null); 
+  const accessToken = Cookies.get('accessToken');
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener('resize', handleResize);
@@ -37,7 +44,7 @@ const ChatPage = () => {
       try {
         const response = await axios.get('https://aipcrepair.onrender.com/apis/user/chats/', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
         setChatHistory(response.data); 
@@ -47,13 +54,17 @@ const ChatPage = () => {
     };
 
     fetchChatHistory();
-  }, []);
+  }, [accessToken]);
+useEffect(() => {
+  // Auto-scroll to the bottom when selectedChat changes
+  chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+}, [selectedChat]);
 
   const fetchChatMessages = async (chatId) => {
     try {
       const response = await axios.get(`https://aipcrepair.onrender.com/apis/chats/${chatId}/messages/`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       setSelectedChat(response.data); 
@@ -82,7 +93,7 @@ const ChatPage = () => {
       const response = await axios.post('https://aipcrepair.onrender.com/apis/chatbot-diagnose/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -112,37 +123,6 @@ const ChatPage = () => {
     localStorage.removeItem('chatId'); 
   };
 
-  // Delete chat function
-  // const deleteChat = async (chatIdToDelete) => {
-  //   try {
-  //     // Send request to delete the chat from the backend
-  //     await axios.delete(`http://127.0.0.1:8000/apis/chats/${chatIdToDelete}/`, {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-  //       },
-  //     });
-  
-  //     // Remove the deleted chat from the local chat history
-  //     setChatHistory((prevHistory) => prevHistory.filter((chat) => chat.id !== chatIdToDelete));
-  
-  //     // If the deleted chat is the currently selected chat, clear it from localStorage and state
-  //     if (chatIdToDelete === chatId) {
-  //       localStorage.removeItem('chatId');
-  //       setChatId(null);
-  //       setSelectedChat([]); // Clear the selected chat messages
-  //     }
-  
-  //     // Refetch chat history from backend after deletion to ensure data consistency
-  //     const response = await axios.get('http://127.0.0.1:8000/apis/user/chats/', {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-  //       },
-  //     });
-  //     setChatHistory(response.data);
-  //   } catch (error) {
-  //     console.error('Error deleting chat:', error);
-  //   }
-  // };
   
   const deleteChat = async (chatId) => {
     // Ask for confirmation before deleting the chat
@@ -150,7 +130,7 @@ const ChatPage = () => {
   
     if (confirmDelete) {
       try {
-        const accessToken = localStorage.getItem('accessToken');
+        const accessToken = Cookies.get('accessToken');
         await axios.delete(`https://aipcrepair.onrender.com/apis/chats/delete/${chatId}/`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -251,12 +231,35 @@ const ChatPage = () => {
                     <img src={chat.image_url} alt="Sent Image" className="w-20 h-20 object-cover rounded-lg mt-2" />
                   )}
                 </div>
+                
+                <div ref={chatEndRef} /> {/* Scroll anchor for new messages */}
+
+
+                
+                
               </div>
             ))
           ) : (
             <div className="text-gray-400 text-center">Start a new conversation...</div>
           )}
-
+          {isSending && (
+  <div className="mb-4 text-left">
+    <div className={`inline-block p-3 rounded-lg shadow-md bg-gray-300 text-black animate__animated animate__fadeIn`}>
+      <p className="text-sm font-bold">DocTech</p>
+      <div className="flex justify-center items-center gap-2 mt-2">
+        {/* Using Tailwind for spacing and positioning */}
+        <div className="animate__animated animate__bounce animate__delay-1s w-2 h-2 bg-blue-500 rounded-full"></div>
+        <div className="animate__animated animate__bounce animate__delay-1.5s w-2 h-2 bg-blue-500 rounded-full"></div>
+        <div className="animate__animated animate__bounce animate__delay-2s w-2 h-2 bg-blue-500 rounded-full"></div>
+      </div>
+    </div>
+    
+  </div>
+  
+  
+)}
+<div ref={chatEndRef} /> {/* Scroll anchor for new messages */}
+          
           {selectedImage && (
             <div className="flex justify-between items-center mt-4 bg-gray-700 p-3 rounded-lg">
               <img src={URL.createObjectURL(selectedImage)} alt="Preview" className="w-40 h-40 object-cover rounded-lg" />
@@ -299,6 +302,7 @@ const ChatPage = () => {
     onChange={(e) => setSelectedImage(e.target.files[0])}
   />
 
+
   <button
     onClick={sendMessage}
     disabled={isSending}
@@ -311,9 +315,9 @@ const ChatPage = () => {
   <button onClick={toggleTheme} className="ml-2 p-2 rounded-full">
     {theme === 'light' ? <FiMoon size={24} className="text-black" /> : <FiSun size={24} />}
   </button>
-</div>
+  </div>
 
-      </main>
+  </main>
     </div>
     </ProtectedRoute>
   );
