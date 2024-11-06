@@ -13,7 +13,7 @@ const Profile = () => {
     const fetchUserData = async () => {
       try {
         const accessToken = Cookies.get('accessToken')
-        const response = await axios.get('https://aipcrepair.onrender.com/apis/profile/', {
+        const response = await axios.get('https://pcrepair.vercel.app/apis/profile/', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -29,7 +29,7 @@ const Profile = () => {
     const fetchChats = async () => {
       try {
         const accessToken = Cookies.get('accessToken')
-        const response = await axios.get('https://aipcrepair.onrender.com/apis/user/chats/', {
+        const response = await axios.get('https://pcrepair.vercel.app/apis/user/chats/', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },

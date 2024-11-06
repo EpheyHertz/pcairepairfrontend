@@ -22,7 +22,7 @@ const ProtectedRoute = ({ children }) => {
 
       try {
         // Validate token by making a request to the backend
-        const response = await axios.get('https://aipcrepair.onrender.com/apis/validate-token/', {
+        const response = await axios.get('https://pcrepair.vercel.app/apis/validate-token/', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },

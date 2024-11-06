@@ -16,7 +16,7 @@ const Nav = () => {
   };
   const accessToken = Cookies.get('accessToken');
   const handleLogout = () => {
-    axios.post('https://aipcrepair.onrender.com/apis/logout/', {}, {
+    axios.post('https://pcrepair.vercel.app/apis/logout/', {}, {
         headers: {
             'Authorization': `Bearer ${accessToken}`, // Adjust based on your storage
         }

@@ -19,7 +19,7 @@ const NewsPage = () => {
     setLoadingMore(true); // Set loadingMore to true when fetching
     setArticlesRendering(true);
     try {
-      const res = await axios.get(`https://aipcrepair.onrender.com/apis/tech-news/?page=${page}`, {
+      const res = await axios.get(`https://pcrepair.vercel.app/apis/tech-news/?page=${page}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -42,7 +42,7 @@ const chatEndRef = useRef(null);
 
     const fetchChatHistory = async () => {
       try {
-        const response = await axios.get('https://aipcrepair.onrender.com/apis/user/chats/', {
+        const response = await axios.get('https://pcrepair.vercel.app/apis/user/chats/', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -62,7 +62,7 @@ useEffect(() => {
 
   const fetchChatMessages = async (chatId) => {
     try {
-      const response = await axios.get(`https://aipcrepair.onrender.com/apis/chats/${chatId}/messages/`, {
+      const response = await axios.get(`https://pcrepair.vercel.app/apis/chats/${chatId}/messages/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -90,7 +90,7 @@ useEffect(() => {
 
       if (selectedImage) formData.append('image', selectedImage);
 
-      const response = await axios.post('https://aipcrepair.onrender.com/apis/chatbot-diagnose/', formData, {
+      const response = await axios.post('https://pcrepair.vercel.app/apis/chatbot-diagnose/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${accessToken}`,
@@ -131,7 +131,7 @@ useEffect(() => {
     if (confirmDelete) {
       try {
         const accessToken = Cookies.get('accessToken');
-        await axios.delete(`https://aipcrepair.onrender.com/apis/chats/delete/${chatId}/`, {
+        await axios.delete(`https://pcrepair.vercel.app/apis/chats/delete/${chatId}/`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },

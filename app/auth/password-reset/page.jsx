@@ -12,7 +12,7 @@ const PasswordResetRequest = () => {
     e.preventDefault();
     setLoading(true);  // Set loading to true when the form is submitted
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://aipcrepair.onrender.com';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://pcrepair.vercel.app';
       const response = await axios.post(`${apiUrl}/apis/password-reset/`, { email });
       alert(response.data.message);
       setEmail('');  // Clear the email input after submission

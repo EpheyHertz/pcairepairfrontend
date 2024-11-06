@@ -6,7 +6,7 @@ export async function POST(req) {
   const { username, email, password } = await req.json();
 
   try {
-    const response = await axios.post('https://aipcrepair.onrender.com/apis/signup/', {
+    const response = await axios.post('https://pcrepair.vercel.app/apis/signup/', {
       username,
       email,
       password,

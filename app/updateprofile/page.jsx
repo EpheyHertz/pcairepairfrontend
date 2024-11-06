@@ -18,7 +18,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('https://aipcrepair.onrender.com/apis/profile/', {
+        const response = await axios.get('https://pcrepair.vercel.app/apis/profile/', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -36,7 +36,7 @@ const Profile = () => {
 
     const fetchChats = async () => {
       try {
-        const response = await axios.get('https://aipcrepair.onrender.com/apis/user/chats/', {
+        const response = await axios.get('https://pcrepair.vercel.app/apis/user/chats/', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -64,7 +64,7 @@ const Profile = () => {
     }
 
     try {
-      await axios.put('https://aipcrepair.onrender.com/apis/profile/', formData, {
+      await axios.put('https://pcrepair.vercel.app/apis/profile/', formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'multipart/form-data',
@@ -75,7 +75,7 @@ const Profile = () => {
       setUsername('');
       setFullname('');
       setAbout('');
-      const response = await axios.get('https://aipcrepair.onrender.com/apis/profile/', {
+      const response = await axios.get('https://pcrepair.vercel.app/apis/profile/', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

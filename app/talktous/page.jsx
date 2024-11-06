@@ -30,7 +30,7 @@ const TalkToUs = () => {
     setIsSending(true);
     try {
       const accessToken = Cookies.get('accessToken')
-      await axios.post('https://aipcrepair.onrender.com/apis/contact-us/', {
+      await axios.post('https://pcrepair.vercel.app/apis/contact-us/', {
         email: userData.email,
         full_name: userData.fullname,
         message,

@@ -29,7 +29,7 @@ function UseQueryParams() {
     }
 
     try {
-      const response = await axios.post('https://aipcrepair.onrender.com/apis/password-reset-confirm/', {
+      const response = await axios.post('https://pcrepair.vercel.app/apis/password-reset-confirm/', {
         token,
         email,
         new_password: newPassword,

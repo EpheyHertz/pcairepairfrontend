@@ -13,7 +13,7 @@ const TokenRefresher = () => {
       }
 
       try {
-        const response = await axios.post('https://aipcrepair.onrender.com/apis/token/refresh/', {
+        const response = await axios.post('https://pcrepair.vercel.app/apis/token/refresh/', {
           refresh: refreshToken,
         });
 

@@ -58,7 +58,7 @@ const EmailVerification = () => {
     useEffect(() => {
         if (email && token) {
             // Send email and token to the backend for verification
-            axios.post('https://aipcrepair.onrender.com/apis/verify-email/', {
+            axios.post('https://pcrepair.vercel.app/apis/verify-email/', {
                 token,    // Make sure the token is correctly passed
                 email     // Ensure the correct email is being passed
             })
