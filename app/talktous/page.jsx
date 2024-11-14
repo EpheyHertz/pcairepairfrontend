@@ -12,7 +12,7 @@ const TalkToUs = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('https://aipcrepair.onrender.com/apis/profile/', {
+        const response = await axios.get('https://pcrepair.vercel.app/apis/profile/', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
