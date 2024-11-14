@@ -22,8 +22,8 @@ export function middleware(request) {
     const accessToken = request.cookies.get('accessToken');
 
     // Log values for debugging
-    console.log("Pathname:", pathname);
-    console.log("Access Token:", accessToken);
+    // console.log("Pathname:", pathname);
+    // console.log("Access Token:", accessToken);
 
     if (accessToken) {
         // If authenticated, redirect away from public routes
