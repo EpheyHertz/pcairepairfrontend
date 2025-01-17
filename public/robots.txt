@@ -1,0 +1,13 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /admin
+
+# Host
+Host: https://pcairepair.vercel.app
+
+# Sitemaps
+Sitemap: https://pcairepair.vercel.app/sitemap.xml
