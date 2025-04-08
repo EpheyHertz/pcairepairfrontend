@@ -27,7 +27,7 @@ const Navbar = () => {
   }, [handleScroll]);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 bg-blue-600 text-white shadow-md transition-transform duration-300 ${showNavbar ? 'translate-y-0' : '-translate-y-full'}`}>
+    <header className={`fixed top-0 left-0 right-0  text-white shadow-md transition-transform duration-300 ${showNavbar ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="container mx-auto py-4 px-6 z-10">
             <Nav />
         </div>

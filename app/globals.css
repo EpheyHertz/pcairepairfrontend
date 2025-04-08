@@ -15,10 +15,6 @@
 }
 
 body {
-  background-image: url('../public/images/background.png'); /* Path to your image */
-  background-size: cover; /* Make the image cover the entire screen */
-  background-position: center; /* Center the image */
-  background-repeat: no-repeat; /* Prevent the image from repeating */
   min-height: 100vh; /* Ensure the body takes the full viewport height */
   color: white; /* Adjust text color for visibility */
 }
@@ -99,4 +95,16 @@ p {
   h2 {
     font-size: 1.5rem;
   }
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+.animation-pause {
+  animation-play-state: paused;
 }

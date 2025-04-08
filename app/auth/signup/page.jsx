@@ -2,177 +2,235 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
 
 const SignupPage = () => {
-  const router = useRouter()
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const router = useRouter();
+const [formData, setFormData] = useState({
+  email: '',
+  username: '',
+  password: '',
+  confirmPassword: ''
+});
+const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+const [isSubmitting, setIsSubmitting] = useState(false);
+const [error, setError] = useState('');
+const [agreeToTerms, setAgreeToTerms] = useState(false);
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError('');
-    setSuccess('');
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  if (name === 'username') {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value.replace(/\s+/g, '') // Remove spaces from username
+    }));
+  } else {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  }
+};
 
-    // Basic validation
-    if (password.length < 8) {
-      setError('Password should be at least 8 characters long');
-      setIsSubmitting(false);
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      setIsSubmitting(false);
-      return;
-    }
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError('');
 
-    // Simulate an API call for signup
-    try {
-        const response = await fetch('/apis/signup', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              username,
-              email,
-              password,
-            }),
-          });
-      
-          
-          if (response.ok) {
-            const result = await response.json();
-            setSuccess(result.message);
-            alert("Please check your email for email verification") // Update message based on the result
-            router.push('/auth/login')
-            // Optionally clear the form or redirect to login
-            setEmail('');
-            setUsername('');
-            setPassword('');
-            setConfirmPassword('');
-            setIsSubmitting(false);
-          }
-    } catch (error) {
-      setError('Signup failed, please try again.');
-    } finally {
-      setIsSubmitting(false);
+  if (!agreeToTerms) {
+    return setError('Please accept the terms & conditions and privacy policy');
+  }
+
+  if (formData.password.length < 8) {
+    return setError('Password must be at least 8 characters');
+  }
+
+  if (formData.password !== formData.confirmPassword) {
+    return setError('Passwords do not match');
+  }
+
+  setIsSubmitting(true);
+
+  try {
+    const { email, username, password } = formData;
+    const response = await fetch('/apis/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, email, password }),
+    });
+    console.log("Response:",response)
+
+    if (response.ok) {
+      alert("Please check your email for verification");
+      router.push('/auth/login');
+      setFormData({ email: '', username: '', password: '', confirmPassword: '' });
+    } else {
+      setError(response.message||'Signup failed. Please try again.');
     }
-  };
+  } catch (err) {
+    console.error(err);
+    setError(err ||'Signup failed. Please try again.');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
-    <div className="min-h-screen bg-transparent relative flex items-center justify-center rounded-3xl mb-10 mt-10 ">
-      <div className="absolute inset-0 bg-cover bg-center  rounded-3xl" style={{ backgroundImage: 'url("../images/signuplogin.png")' }}>
-        <div className="bg-black bg-opacity-50 h-full w-full" /> {/* Overlay for readability */}
-      </div>
-
-      <div className="relative z-10 bg-gray-900 bg-opacity-80 p-8 rounded-lg shadow-lg max-w-md w-full">
-        <h2 className="text-3xl font-bold text-white text-center">Sign Up</h2>
-
-        {error && <div className="text-red-500 text-center">{error}</div>}
-        {success && <div className="text-green-500 text-center">{success}</div>}
-
-        <form onSubmit={handleSignup} className="mt-4">
-          <div className="mb-4">
-            <label className="block text-gray-200" htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full p-2 rounded border border-gray-300 bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+        {/* Form Section */}
+        <div className="w-full md:w-2/5 p-8 md:p-12">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Start Your Tech Journey
+            </h1>
+            <p className="text-gray-600">
+              Join DocTech AI for expert PC repair solutions
+            </p>
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-200" htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              className="w-full p-2 rounded border border-gray-300 bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-200" htmlFor="password">Password</label>
-            <div className="relative">
-              <input
-                type={isPasswordVisible ? 'text' : 'password'}
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full p-2 rounded border border-gray-300 bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-              <button
-                type="button"
-                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500"
-              >
-                {isPasswordVisible ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 3a7 7 0 00-5.937 11.012l-.846.846A1 1 0 002 16.162l2.085-2.085A8.962 8.962 0 0110 18a8.962 8.962 0 015.937-2.922l2.085 2.085a1 1 0 001.415-1.415l-.846-.846A7 7 0 0010 3z" /><path d="M10 8a2 2 0 100 4 2 2 0 000-4z" /></svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 3a7 7 0 00-5.937 11.012l-.846.846A1 1 0 002 16.162l2.085-2.085A8.962 8.962 0 0110 18a8.962 8.962 0 015.937-2.922l2.085 2.085a1 1 0 001.415-1.415l-.846-.846A7 7 0 0010 3z" /><path d="M10 8a2 2 0 100 4 2 2 0 000-4z" /></svg>
-                )}
-              </button>
+          {error && (
+            <div className="mb-6 p-3 bg-red-50 text-red-700 text-sm rounded-lg">
+              {error}
             </div>
-          </div>
+          )}
 
-          <div className="mb-4">
-            <label className="block text-gray-200" htmlFor="confirmPassword">Confirm Password</label>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Email Field */}
             <div className="relative">
-              <input
-                type={isPasswordVisible ? 'text' : 'password'}
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                className="w-full p-2 rounded border border-gray-300 bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-              <button
-                type="button"
-                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500"
-              >
-                {isPasswordVisible ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 3a7 7 0 00-5.937 11.012l-.846.846A1 1 0 002 16.162l2.085-2.085A8.962 8.962 0 0110 18a8.962 8.962 0 015.937-2.922l2.085 2.085a1 1 0 001.415-1.415l-.846-.846A7 7 0 0010 3z" /><path d="M10 8a2 2 0 100 4 2 2 0 000-4z" /></svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 3a7 7 0 00-5.937 11.012l-.846.846A1 1 0 002 16.162l2.085-2.085A8.962 8.962 0 0110 18a8.962 8.962 0 015.937-2.922l2.085 2.085a1 1 0 001.415-1.415l-.846-.846A7 7 0 0010 3z" /><path d="M10 8a2 2 0 100 4 2 2 0 000-4z" /></svg>
-                )}
-              </button>
+              <div className="flex items-center border-b-2 border-gray-200 focus-within:border-blue-600 transition-colors">
+                <Mail className="w-5 h-5 text-gray-400 mr-3" />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full py-3 bg-transparent focus:outline-none text-gray-900 placeholder-gray-400"
+                  required
+                />
+              </div>
             </div>
-          </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={`w-full p-2 rounded-md text-white ${isSubmitting ? 'bg-gray-600' : 'bg-blue-600 hover:bg-blue-500'} transition duration-200`}
-          >
-            {isSubmitting ? 'Signing Up...' : 'Sign Up'}
-          </button>
-        </form>
+            {/* Username Field */}
+            <div className="relative">
+              <div className="flex items-center border-b-2 border-gray-200 focus-within:border-blue-600 transition-colors">
+                <User className="w-5 h-5 text-gray-400 mr-3" />
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Username (no spaces)"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className="w-full py-3 bg-transparent focus:outline-none text-gray-900 placeholder-gray-400"
+                  required
+                />
+              </div>
+            </div>
 
-        <div className="mt-4 text-center text-gray-300">
-          <p>
+            {/* Password Field */}
+            <div className="relative">
+              <div className="flex items-center border-b-2 border-gray-200 focus-within:border-blue-600 transition-colors">
+                <Lock className="w-5 h-5 text-gray-400 mr-3" />
+                <input
+                  type={isPasswordVisible ? 'text' : 'password'}
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full py-3 bg-transparent focus:outline-none text-gray-900 placeholder-gray-400"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                  className="ml-3 text-gray-400 hover:text-blue-600 transition-colors"
+                  aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
+                >
+                  {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Confirm Password Field */}
+            <div className="relative">
+              <div className="flex items-center border-b-2 border-gray-200 focus-within:border-blue-600 transition-colors">
+                <Lock className="w-5 h-5 text-gray-400 mr-3" />
+                <input
+                  type={isPasswordVisible ? 'text' : 'password'}
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="w-full py-3 bg-transparent focus:outline-none text-gray-900 placeholder-gray-400"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Terms Checkbox */}
+            <div className="flex items-start mt-6">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={agreeToTerms}
+                onChange={(e) => setAgreeToTerms(e.target.checked)}
+                className="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label htmlFor="terms" className="ml-3 text-sm text-gray-600">
+                I agree to the{' '}
+                <Link href="/terms" className="text-blue-600 hover:underline font-medium">
+                  Terms & Conditions
+                </Link>{' '}
+                and{' '}
+                <Link href="/privacy" className="text-blue-600 hover:underline font-medium">
+                  Privacy Policy
+                </Link>
+              </label>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={`w-full py-4 rounded-xl font-semibold text-white transition-colors ${
+                isSubmitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+              }`}
+            >
+              {isSubmitting ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creating Account...
+                </span>
+              ) : (
+                'Get Started Now'
+              )}
+            </button>
+          </form>
+
+          {/* Login Link */}
+          <div className="mt-8 text-center text-sm text-gray-600">
             Already have an account?{' '}
-            <Link href="/auth/login" className="text-blue-400 hover:underline">Log In</Link>
-          </p>
-          <p>
-            By registering With us you agree to our
-          <Link href="https://epheyhertz.github.io/doctechprivacyandterms/" className="text-blue-400 hover:underline ml-2">
-             Terms and Policy
-          </Link>
-          </p>
+            <Link href="/auth/login" className="text-blue-600 font-medium hover:underline">
+              Sign In
+            </Link>
+          </div>
+        </div>
+
+        {/* Image Section */}
+        <div className="w-full md:w-3/5 bg-gray-100 hidden md:block relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 to-blue-600/30" />
+          <img
+            src="https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop"
+            alt="PC Repair Technician working on computer hardware"
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute bottom-8 left-8 right-8 text-white">
+            <h3 className="text-xl font-bold mb-2">Expert PC Repair Solutions</h3>
+            <p className="text-blue-100">Join thousands of satisfied customers who trust our technicians</p>
+          </div>
         </div>
       </div>
     </div>

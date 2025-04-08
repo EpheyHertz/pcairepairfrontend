@@ -11,6 +11,7 @@ export async function POST(req) {
       email,
       password,
     });
+    // console.log("Response:",response)
 
     // Check if the response is successful
     if (response.status >= 200 && response.status < 300) {
