@@ -54,7 +54,7 @@ const Footer = () => {
               <span className="text-xl font-bold text-white tracking-tight">DocTech</span>
             </div>
             <p className="text-gray-300 text-sm mb-4 max-w-xs">
-              Empowering digital document management with cutting-edge technology solutions for modern businesses.
+            AI-powered device repair assistant that helps you diagnose and fix your tech problems instantly.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">

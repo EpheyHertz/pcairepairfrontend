@@ -1,559 +1,572 @@
+// The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work.
 'use client'
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
-import { useInView } from "react-intersection-observer";
-import CountUp from "react-countup";
-import { QrCode, Download, Smartphone, CheckCircle, Globe, Star } from "lucide-react";
-import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
 
-// Data constants
-const repairServices = [
-  { 
-    title: "AI Diagnostics", 
-    image: "https://images.unsplash.com/photo-1591370874773-6702dfa7d117?q=80&w=800",
-    stats: ["Instant Error Analysis", "Predictive Maintenance", "Component Health Check"]
-  },
-  { 
-    title: "Hardware Repair", 
-    image: "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?q=80&w=800",
-    stats: ["Component Replacement", "Liquid Damage Repair", "Battery Services"]
-  },
-  { 
-    title: "Software Solutions", 
-    image: "https://images.unsplash.com/photo-1588863046922-745c33da7e51?q=80&w=800",
-    stats: ["OS Optimization", "Virus Removal", "Data Recovery"]
-  }
-];
+const App =() => {
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [isAccordionOpen, setIsAccordionOpen] = useState(null);
 
-const workflowSteps = [
-  {
-    title: "Describe Your Issue",
-    content: "Snap a photo or describe your device problem through our AI interface",
-    icon: <Globe className="w-12 h-12 mx-auto" />
-  },
-  {
-    title: "Instant Analysis",
-    content: "Our AI cross-references millions of repair cases for accurate diagnosis",
-    icon: <Smartphone className="w-12 h-12 mx-auto" />
-  },
-  {
-    title: "Repair Solution",
-    content: "Receive step-by-step guidance or connect with certified technicians",
-    icon: <CheckCircle className="w-12 h-12 mx-auto" />
-  }
-];
-
-const faqItems = [
-  { question: "How accurate is the AI diagnosis?", answer: "Our AI achieves 98% accuracy by learning from millions of repair cases" },
-  { question: "Can I get onsite repair services?", answer: "Yes, we partner with certified technicians in over 200 cities" },
-  { question: "What devices do you support?", answer: "All major PC brands, smartphones, and tablets from 2010 onward" },
-  { question: "Is my data safe during repairs?", answer: "We use military-grade encryption and never store personal files" }
-];
-
-const partners = [
-  { name: 'Samsung', logo: 'https://images.unsplash.com/photo-1610021685072-c6cf1f4f9ab5?q=80&w=400' },
-  { name: 'Google', logo: 'https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?q=80&w=400' },
-  { name: 'Apple', logo: 'https://images.unsplash.com/photo-1610965628381-4fb2e9c09e53?q=80&w=400' },
-  { name: 'Microsoft', logo: 'https://images.unsplash.com/photo-1557434440-27ba0f1e0d8b?q=80&w=400' },
-  { name: 'Dell', logo: 'https://images.unsplash.com/photo-1593642532400-2682810df593?q=80&w=400' },
-];
-
-const reviews = [
-  {
-    name: "Sarah Johnson",
-    role: "IT Manager",
-    text: "The AI diagnostics saved us countless hours in troubleshooting. Our team's efficiency improved by 40% since we started using this service.",
-    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=400"
-  },
-  {
-    name: "Michael Chen",
-    role: "Small Business Owner",
-    text: "Incredible turnaround time and professional service. Recovered critical data from a water-damaged laptop that others said was impossible.",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400"
-  },
-  {
-    name: "Emma Wilson",
-    role: "Graphic Designer",
-    text: "The most reliable repair service I've used. Their predictive maintenance feature helped avoid costly downtime during critical projects.",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=400"
-  }
-];
-
-const heroSlides = [
-  {
-    image: 'https://images.unsplash.com/photo-1588859500245-f38ee8f159fd?q=80&w=1200',
-    quote: "Smart repairs for the digital age"
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1603732551683-5a624c6aa53b?q=80&w=1200',
-    quote: "Your devices deserve expert care"
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?q=80&w=1200',
-    quote: "Precision meets artificial intelligence"
-  }
-];
-
-// Individual Review Component
-const ReviewCard = ({ review, index }) => {
-  const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true });
-  const isEven = index % 2 === 0;
-  
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, x: isEven ? -100 : 100 }}
-      animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.8 }}
-      className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} gap-8 items-center`}
-    >
-      <motion.div
-        whileHover={{ rotate: 2, scale: 1.05 }}
-        className="relative md:w-1/3 aspect-square rounded-2xl overflow-hidden shadow-xl"
-      >
-        <div className="w-full h-full relative">
-          <Image
-            src={review.image}
-            alt={review.name}
-            fill
-            sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover"
-            priority={index === 0}
-            loading={index === 0 ? "eager" : "lazy"}
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-      </motion.div>
-
-      <motion.div
-        whileHover={{ y: -5 }}
-        className="md:w-2/3 p-8 rounded-2xl bg-white shadow-lg"
-      >
-        <div className="flex mb-4 text-yellow-400">
-          {[...Array(5)].map((_, i) => (
-            <Star key={i} className="w-6 h-6 fill-current" />
-          ))}
-        </div>
-        <p className="text-xl mb-6 text-gray-700">
-        &quot;{review.text}&quot;
-        </p>
-        <div className="border-l-4 border-blue-600 pl-4">
-          <h3 className="text-2xl font-bold text-gray-900">{review.name}</h3>
-          <p className="text-gray-600">
-            {review.role}
-          </p>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-};
-
-// New StatItem Component to fix the useInView hook error
-const StatItem = ({ stat, index }) => {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
-  
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: index * 0.2 }}
-      className="p-4"
-    >
-      <div className="text-4xl md:text-5xl font-bold mb-2">
-        {inView && (
-          <CountUp 
-            end={stat.value} 
-            duration={2.5}
-            decimals={stat.value % 1 !== 0 ? 1 : 0}
-            suffix={stat.label.includes('%') ? '%' : ''}
-          />
-        )}
-      </div>
-      <div className="text-blue-100">{stat.label}</div>
-    </motion.div>
-  );
-};
-
-// FAQ Item Component
-const FaqItem = ({ faq, index }) => {
-  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
-  
-  return (
-    <motion.div 
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: index * 0.1 }}
-      className="border rounded-xl p-6 hover:shadow-lg transition-shadow hover:border-blue-200"
-    >
-      <details className="group">
-        <summary className="flex justify-between items-center cursor-pointer">
-          <h3 className="text-lg font-semibold">{faq.question}</h3>
-          <span className="text-2xl text-blue-600 group-open:hidden">+</span>
-          <span className="text-2xl text-blue-600 hidden group-open:inline">−</span>
-        </summary>
-        <p className="mt-4 text-gray-600">{faq.answer}</p>
-      </details>
-    </motion.div>
-  );
-};
-
-export default function Home() {
-  const [activeHeroSlide, setActiveHeroSlide] = useState(0);
-  const [isHeroHovered, setIsHeroHovered] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Stats data
-  const statsData = [
-    { value: 24653, label: "Devices Fixed" },
-    { value: 98.7, label: "Success Rate %" },
-    { value: 15, label: "Min Average Repair Time" },
-    { value: 200, label: "Cities Served" }
-  ];
-
-  // For page load animations
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
+  const toggleAccordion = (index) => {
+    setIsAccordionOpen(isAccordionOpen === index ? null : index);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!isHeroHovered) {
-        setActiveHeroSlide(prev => (prev + 1) % heroSlides.length);
-      }
+      setActiveTestimonial((prev) => (prev === 2 ? 0 : prev + 1));
     }, 5000);
     return () => clearInterval(interval);
-  }, [isHeroHovered]);
-
-  const slideUp = {
-    hidden: { y: 100, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.8 } }
-  };
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
-      {/* Page loading animation */}
-      <AnimatePresence>
-        {!isLoaded && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, delay: 0.3 }}
-            className="fixed inset-0 z-50 bg-blue-600 flex items-center justify-center"
-          >
-            <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1.2 }}
-              exit={{ scale: 2 }}
-              transition={{ duration: 1.5 }}
-              className="text-white text-4xl font-bold"
-            >
-              AI Device Repair
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Background gradient effect */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-0 -left-1/4 w-1/2 h-1/2 bg-blue-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 -right-1/4 w-1/2 h-1/2 bg-blue-500/10 rounded-full blur-3xl"></div>
-      </div>
-
-      {/* Hero Section */}
-      <section className="relative h-screen overflow-hidden" onMouseEnter={() => setIsHeroHovered(true)} onMouseLeave={() => setIsHeroHovered(false)}>
-        <AnimatePresence mode='wait'>
-          <motion.div
-            key={activeHeroSlide}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 1 }}
-            className="absolute inset-0 bg-cover bg-center"
-          >
-            <Image 
-              src={heroSlides[activeHeroSlide].image}
-              alt={`Hero slide ${activeHeroSlide + 1}`}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-            />
-          </motion.div>
-        </AnimatePresence>
-
-        <div className="relative z-10 h-full flex items-center justify-center text-center p-8 bg-black/40">
-          <AnimatePresence mode='wait'>
-            <motion.div
-              key={activeHeroSlide}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="backdrop-blur-xl bg-white/10 p-12 rounded-3xl max-w-4xl"
-            >
-              <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-blue-400 to-purple-600 bg-clip-text text-transparent">
-                AI-Powered Device Repair
-              </h1>
-              <motion.p className="text-2xl text-white italic mb-8">
-              &quot;{heroSlides[activeHeroSlide].quote}&quot;
-              </motion.p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                className="bg-blue-600 text-white px-8 py-4 rounded-xl text-lg shadow-lg hover:bg-blue-700"
-              >
-                Start Free Diagnosis
-              </motion.button>
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="absolute bottom-8 flex gap-4">
-            {heroSlides.map((_, i) => (
-              <button key={i} onClick={() => setActiveHeroSlide(i)}
-                className={`w-3 h-3 rounded-full transition-all ${activeHeroSlide === i ? 'bg-blue-500 scale-125' : 'bg-white/50'}`}
-              />
-            ))}
+    <div className="min-h-screen bg-gray-50 font-sans">
+      {/* Navigation */}
+      {/* <nav className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <div className="flex items-center">
+              <div className="text-2xl font-bold text-blue-600">DocTech</div>
+            </div>
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#features" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">Features</a>
+              <a href="#how-it-works" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">How It Works</a>
+              <a href="#testimonials" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">Testimonials</a>
+              <a href="#faq" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">FAQ</a>
+              <a href="#download" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">Download</a>
+            </div>
+            <div className="md:hidden flex items-center">
+              <button className="text-gray-700 hover:text-blue-600 focus:outline-none !rounded-button cursor-pointer whitespace-nowrap">
+                <i className="fas fa-bars text-xl"></i>
+              </button>
+            </div>
           </div>
         </div>
-      </section>
+      </nav> */}
 
-      {/* How It Works */}
-      <section className="py-20 px-4">
-        <h2 className="text-4xl font-bold mb-16 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Smart Repair Process</h2>
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {workflowSteps.map((step, i) => (
-            <motion.div key={i} variants={slideUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="bg-white p-8 rounded-2xl shadow-lg text-center hover:shadow-xl transition-shadow hover:border-blue-200 border border-transparent">
-              <div className="text-blue-600 mb-4">{step.icon}</div>
-              <h3 className="text-2xl font-bold mb-4">{step.title}</h3>
-              <p className="text-gray-600">{step.content}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Repair Services */}
-      <section className="py-20 px-4">
-        <h2 className="text-4xl font-bold mb-16 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Our Expertise</h2>
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {repairServices.map((service, i) => (
-            <motion.div 
-              key={i} 
-              variants={slideUp} 
-              initial="hidden" 
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="relative group overflow-hidden rounded-2xl shadow-xl h-64"
-            >
-              <div className="relative w-full h-full">
-                <Image 
-                  src={service.image} 
-                  alt={service.title} 
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading={i === 0 ? "eager" : "lazy"}
+      {/* Hero Section */}
+      <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{
+        backgroundImage: `url('https://readdy.ai/api/search-image?query=Modern%20tech%20background%20with%20gradient%20blue%20to%20dark%20blue%2C%20abstract%20digital%20pattern%20with%20subtle%20tech%20elements%2C%20clean%20professional%20look%20for%20AI%20app%20landing%20page%2C%20high%20quality%20digital%20art&width=1440&height=800&seq=1&orientation=landscape')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+      }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="text-white">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+                Diagnose & Fix Your Devices with AI – Instantly
+              </h1>
+              <p className="text-lg md:text-xl mb-8 text-blue-100">
+                DocTech analyzes problems using smart AI tools and gives you real-time solutions for your PCs, phones, and laptops.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-8 rounded-lg shadow-lg transition-all transform hover:scale-105 !rounded-button cursor-pointer whitespace-nowrap" onClick={() => window.open('https://play.google.com/store/apps/details?id=app.vercel.pcairepair', '_blank')}>
+                  <i className="fas fa-download mr-2"></i> Download the App
+                </button>
+                <button className="bg-transparent border-2 border-white text-white py-3 px-8 rounded-lg hover:bg-white hover:text-blue-600 transition-all transform hover:scale-105 !rounded-button cursor-pointer whitespace-nowrap">
+                  <i className="fas fa-qrcode mr-2"></i> Scan QR Code
+                </button>
+              </div>
+              <div className="mt-8 p-4 bg-white/20 backdrop-blur-sm rounded-lg inline-block">
+                <img 
+                  src="/images/qrcode.png" 
+                  alt="QR Code" 
+                  className="w-40 h-42 object-cover"
                 />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-6 flex flex-col justify-end group-hover:from-blue-900/80 transition-colors duration-300">
-                <h3 className="text-2xl text-white font-bold mb-4">{service.title}</h3>
-                <div className="space-y-2">
-                  {service.stats.map((stat, j) => (
-                    <div key={j} className="text-gray-200 flex items-center">
-                      <CheckCircle className="w-4 h-4 mr-2 text-blue-400" />{stat}
-                    </div>
-                  ))}
-                </div>
+            </div>
+            <div className="relative">
+              <div className="bg-white rounded-2xl shadow-2xl p-4 transform rotate-2 hover:rotate-0 transition-all duration-300">
+                <img 
+                  src="https://readdy.ai/api/search-image?query=Modern%20smartphone%20UI%20showing%20AI%20chat%20interface%20for%20device%20repair%2C%20clean%20design%20with%20blue%20accent%20colors%2C%20chat%20bubbles%20showing%20diagnostic%20conversation%20about%20device%20repair%2C%20professional%20mockup%20with%20high%20detail&width=500&height=600&seq=3&orientation=portrait" 
+                  alt="DocTech App Interface" 
+                  className="rounded-xl w-full h-auto"
+                />
               </div>
-            </motion.div>
-          ))}
+              <div className="absolute -bottom-6 -left-6 bg-blue-600 text-white p-4 rounded-full shadow-lg animate-pulse">
+                <i className="fas fa-robot text-2xl"></i>
+              </div>
+            </div>
+          </div>
         </div>
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-gray-50 to-transparent"></div>
       </section>
 
-      {/* Stats Counter Section - Fixed with StatItem component */}
-      <section className="py-16 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {statsData.map((stat, i) => (
-            <StatItem key={i} stat={stat} index={i} />
-          ))}
-        </div>
-      </section>
-
-      {/* Mobile App Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-blue-50 to-purple-50">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <motion.div 
-            variants={slideUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <div className="space-y-4">
-              <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Get Our Mobile App</h2>
-              <p className="text-xl text-gray-600">
-                Access AI-powered repair solutions anytime, anywhere. Scan the QR code or download directly:
+      {/* Features Section */}
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Powerful Features</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Our AI-powered platform offers everything you need to diagnose and fix your devices quickly and efficiently.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
+            {/* Feature 1 */}
+            <div className="bg-white rounded-xl shadow-md p-6 transition-all hover:shadow-lg hover:transform hover:scale-105">
+              <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600">
+                <i className="fas fa-brain text-2xl"></i>
+              </div>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900">Smart Diagnostics</h3>
+              <p className="text-gray-600">
+                Upload images or chat to describe your device issues for instant AI analysis.
               </p>
             </div>
             
-            <div className="flex items-center gap-6">
-              <div className="p-4 bg-white rounded-xl shadow-lg">
-                <QrCode className="w-32 h-32 text-blue-600" />
+            {/* Feature 2 */}
+            <div className="bg-white rounded-xl shadow-md p-6 transition-all hover:shadow-lg hover:transform hover:scale-105">
+              <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600">
+                <i className="fas fa-comments text-2xl"></i>
               </div>
-              
-              <div className="space-y-4">
-                <button className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
-                  <Download className="w-5 h-5" />
-                  <span>Google Play Store</span>
-                </button>
-                <button className="flex items-center gap-2 bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition">
-                  <Download className="w-5 h-5" />
-                  <span>Apple App Store</span>
-                </button>
-              </div>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900">Instant Repair Help</h3>
+              <p className="text-gray-600">
+                Get step-by-step repair instructions through our intuitive AI chat interface.
+              </p>
             </div>
-          </motion.div>
-
-          <motion.div 
-            variants={slideUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="relative flex justify-center"
-          >
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/50"></div>
-            <div className="relative w-full max-w-md aspect-[3/4] rounded-2xl shadow-xl overflow-hidden">
-              <Image 
-                src="https://images.unsplash.com/photo-1605170439002-90845e8c0137?q=80&w=800" 
-                alt="Mobile App Preview"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover"
-                loading="lazy"
-              />
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Trusted Partners */}
-      <section className="py-20 px-4">
-        <h2 className="text-3xl font-bold mb-12 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Trusted By Industry Leaders</h2>
-        <div className="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto">
-          {partners.map((partner, i) => (
-            <motion.div
-              key={i}
-              variants={slideUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="w-40 h-20 bg-white backdrop-blur-sm rounded-xl p-4 flex items-center justify-center shadow-md hover:shadow-lg transition"
-            >
-              <div className="relative w-32 h-12">
-                <Image 
-                  src={partner.logo} 
-                  alt={partner.name}
-                  fill
-                  sizes="128px"
-                  className="object-contain grayscale hover:grayscale-0 transition-all"
-                  loading="lazy"
-                />
+            
+            {/* Feature 3 */}
+            <div className="bg-white rounded-xl shadow-md p-6 transition-all hover:shadow-lg hover:transform hover:scale-105">
+              <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600">
+                <i className="fas fa-users text-2xl"></i>
               </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* User Reviews */}
-      <section className="py-20 px-4 bg-gradient-to-b from-blue-50 to-transparent">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-16 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">What Our Clients Say</h2>
-          <div className="space-y-20">
-            {reviews.map((review, i) => (
-              <ReviewCard key={i} review={review} index={i} />
-            ))}
+              <h3 className="text-xl font-semibold mb-2 text-gray-900">Active Community</h3>
+              <p className="text-gray-600">
+                Join our community to ask questions or help others with their device issues.
+              </p>
+            </div>
+            
+            {/* Feature 4 */}
+            <div className="bg-white rounded-xl shadow-md p-6 transition-all hover:shadow-lg hover:transform hover:scale-105">
+              <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600">
+                <i className="fas fa-history text-2xl"></i>
+              </div>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900">Repair History</h3>
+              <p className="text-gray-600">
+                Track all your device repairs and access solutions again whenever needed.
+              </p>
+            </div>
+            
+            {/* Feature 5 */}
+            <div className="bg-white rounded-xl shadow-md p-6 transition-all hover:shadow-lg hover:transform hover:scale-105">
+              <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600">
+                <i className="fas fa-shield-alt text-2xl"></i>
+              </div>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900">Fast, Secure Support</h3>
+              <p className="text-gray-600">
+                Get reliable assistance across all your devices with privacy protection.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ Section - Fixed with FaqItem component */}
-      <section className="py-20 px-4 max-w-4xl mx-auto">
-        <h2 className="text-4xl font-bold mb-16 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Common Questions</h2>
-        <div className="space-y-4">
-          {faqItems.map((faq, i) => (
-            <FaqItem key={i} faq={faq} index={i} />
-          ))}
+      {/* How It Works Section */}
+      <section id="how-it-works" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              DocTech makes device repair simple with just three easy steps
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+            {/* Step 1 */}
+            <div className="bg-gray-50 rounded-xl p-8 text-center relative z-10">
+              <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">1</div>
+              <h3 className="text-xl font-semibold mb-4 text-gray-900">Upload or Describe</h3>
+              <p className="text-gray-600">
+                Take a photo of the issue or describe your device problem in the chat.
+              </p>
+              <div className="mt-6">
+                <i className="fas fa-camera text-5xl text-blue-500"></i>
+              </div>
+            </div>
+            
+            {/* Step 2 */}
+            <div className="bg-gray-50 rounded-xl p-8 text-center relative z-10">
+              <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">2</div>
+              <h3 className="text-xl font-semibold mb-4 text-gray-900">AI Diagnosis</h3>
+              <p className="text-gray-600">
+                Our AI analyzes the problem and identifies the most likely causes.
+              </p>
+              <div className="mt-6">
+                <i className="fas fa-microchip text-5xl text-blue-500"></i>
+              </div>
+            </div>
+            
+            {/* Step 3 */}
+            <div className="bg-gray-50 rounded-xl p-8 text-center relative z-10">
+              <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">3</div>
+              <h3 className="text-xl font-semibold mb-4 text-gray-900">Get Repair Steps</h3>
+              <p className="text-gray-600">
+                Follow the guided repair instructions to fix your device quickly.
+              </p>
+              <div className="mt-6">
+                <i className="fas fa-tools text-5xl text-blue-500"></i>
+              </div>
+            </div>
+            
+            {/* Connecting Lines */}
+            <div className="hidden md:block absolute top-1/2 left-1/4 w-1/2 h-0.5 bg-blue-200 transform -translate-y-1/2 z-0"></div>
+          </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to fix your device?</h2>
-          <p className="text-xl mb-8 text-blue-100">Start with our AI diagnosis and get your device back in working condition quickly</p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            className="bg-white text-blue-600 px-8 py-4 rounded-xl text-lg shadow-lg hover:bg-blue-50 transition"
-          >
-            Start Free Diagnosis
-          </motion.button>
+      {/* Download Section */}
+      <section id="download" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 to-blue-800 text-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">Download DocTech Today</h2>
+              <p className="text-xl mb-8 text-blue-100">
+                Get instant access to our AI-powered repair assistant and start fixing your devices right away.
+              </p>
+              
+              <div className="bg-white/20 backdrop-blur-sm p-8 rounded-xl inline-block mb-8">
+                <img 
+                  src="/images/qrcode.png" 
+                  alt="Download QR Code" 
+                  className="w-56 h-57 object-cover"
+                />
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button className="bg-white text-blue-600 py-3 px-8 rounded-lg shadow-lg transition-all transform hover:scale-105 flex items-center justify-center !rounded-button cursor-pointer whitespace-nowrap" onClick={() => window.open('https://play.google.com/store/apps/details?id=app.vercel.pcairepair', '_blank')}>
+                  <i className="fab fa-android mr-2 text-xl"></i> Download on Android
+                </button>
+                <button className="bg-transparent border-2 border-white text-white py-3 px-8 rounded-lg hover:bg-white hover:text-blue-600 transition-all transform hover:scale-105 flex items-center justify-center !rounded-button cursor-pointer whitespace-nowrap" onClick={() => window.open('https://expo.dev/accounts/epheyhertz/projects/epheyhertz-app-vercel-pcairepair/builds/a8d2a053-2e76-4255-9059-8d590bc6a99b', '_blank')}>
+                  <i className="fas fa-download mr-2"></i> Download APK
+                </button>
+              </div>
+            </div>
+            
+            <div>
+              <img 
+                src="https://readdy.ai/api/search-image?query=Modern%20smartphone%20mockup%20showing%20AI%20repair%20assistant%20app%20interface%20with%20blue%20color%20scheme%2C%20floating%20on%20gradient%20background%2C%20professional%203D%20render%20with%20high%20detail%2C%20showing%20chat%20interface%20for%20device%20repair&width=600&height=600&seq=5&orientation=squarish" 
+                alt="DocTech App" 
+                className="w-full h-auto rounded-2xl shadow-2xl transform -rotate-3 hover:rotate-0 transition-all duration-300"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">What Our Users Say</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Join thousands of satisfied users who have successfully repaired their devices with DocTech
+            </p>
+          </div>
+          
+          <div className="relative">
+            <div className="overflow-hidden">
+              <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${activeTestimonial * 100}%)` }}>
+                {/* Testimonial 1 */}
+                <div className="w-full flex-shrink-0 px-4">
+                  <div className="bg-white rounded-xl shadow-md p-8">
+                    <div className="flex items-center mb-4">
+                      <div className="text-yellow-400 flex">
+                        <i className="fas fa-star"></i>
+                        <i className="fas fa-star"></i>
+                        <i className="fas fa-star"></i>
+                        <i className="fas fa-star"></i>
+                        <i className="fas fa-star"></i>
+                      </div>
+                    </div>
+                    <p className="text-gray-700 text-lg italic mb-6">
+                      &quot;DocTech found the problem with my laptop just from a picture of the error screen! The step-by-step repair guide was so easy to follow. Fixed it myself in 20 minutes!&quote;
+                    </p>
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4 text-blue-600">
+                        <i className="fas fa-user"></i>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900">Michael Johnson</h4>
+                        <p className="text-gray-500 text-sm">Software Engineer</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Testimonial 2 */}
+                <div className="w-full flex-shrink-0 px-4">
+                  <div className="bg-white rounded-xl shadow-md p-8">
+                    <div className="flex items-center mb-4">
+                      <div className="text-yellow-400 flex">
+                        <i className="fas fa-star"></i>
+                        <i className="fas fa-star"></i>
+                        <i className="fas fa-star"></i>
+                        <i className="fas fa-star"></i>
+                        <i className="fas fa-star-half-alt"></i>
+                      </div>
+                    </div>
+                    <p className="text-gray-700 text-lg italic mb-6">
+                      &quote;Way faster than any repair shop I&apos;ve used! My phone had been freezing constantly, and DocTech diagnosed a memory issue in seconds. Followed the cleanup steps and it&apos;s working perfectly now.&quote;
+                    </p>
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4 text-blue-600">
+                        <i className="fas fa-user"></i>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900">Sarah Williams</h4>
+                        <p className="text-gray-500 text-sm">Graphic Designer</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Testimonial 3 */}
+                <div className="w-full flex-shrink-0 px-4">
+                  <div className="bg-white rounded-xl shadow-md p-8">
+                    <div className="flex items-center mb-4">
+                      <div className="text-yellow-400 flex">
+                        <i className="fas fa-star"></i>
+                        <i className="fas fa-star"></i>
+                        <i className="fas fa-star"></i>
+                        <i className="fas fa-star"></i>
+                        <i className="fas fa-star"></i>
+                      </div>
+                    </div>
+                    <p className="text-gray-700 text-lg italic mb-6">
+                    &quote;I was quoted $200 for a simple laptop repair. DocTech helped me fix it myself for free! The AI explained everything in simple terms and guided me through each step. Incredible service!&quote;
+                    </p>
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4 text-blue-600">
+                        <i className="fas fa-user"></i>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900">David Chen</h4>
+                        <p className="text-gray-500 text-sm">College Student</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Testimonial Navigation */}
+            <div className="flex justify-center mt-8 space-x-2">
+              <button 
+                onClick={() => setActiveTestimonial(0)} 
+                className={`w-3 h-3 rounded-full ${activeTestimonial === 0 ? 'bg-blue-600' : 'bg-gray-300'} !rounded-button cursor-pointer whitespace-nowrap`}
+                aria-label="Testimonial 1"
+              ></button>
+              <button 
+                onClick={() => setActiveTestimonial(1)} 
+                className={`w-3 h-3 rounded-full ${activeTestimonial === 1 ? 'bg-blue-600' : 'bg-gray-300'} !rounded-button cursor-pointer whitespace-nowrap`}
+                aria-label="Testimonial 2"
+              ></button>
+              <button 
+                onClick={() => setActiveTestimonial(2)} 
+                className={`w-3 h-3 rounded-full ${activeTestimonial === 2 ? 'bg-blue-600' : 'bg-gray-300'} !rounded-button cursor-pointer whitespace-nowrap`}
+                aria-label="Testimonial 3"
+              ></button>
+            </div>
+          </div>
+          
+          {/* Statistics */}
+          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white rounded-xl shadow-md p-8 text-center">
+              <div className="text-5xl font-bold text-blue-600 mb-4">50K+</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Successful Diagnoses</h3>
+              <p className="text-gray-600">
+                Devices diagnosed and repaired with our AI assistant
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-md p-8 text-center">
+              <div className="text-5xl font-bold text-blue-600 mb-4">95%</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Success Rate</h3>
+              <p className="text-gray-600">
+                Of users successfully repair their devices with our guidance
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-md p-8 text-center">
+              <div className="text-5xl font-bold text-blue-600 mb-4">100%</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Secure & Private</h3>
+              <p className="text-gray-600">
+                Your device data is always protected and never shared
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+            <p className="text-lg text-gray-600">
+              Find answers to common questions about DocTech
+            </p>
+          </div>
+          
+          <div className="space-y-4">
+            {/* FAQ Item 1 */}
+            <div className="border border-gray-200 rounded-lg overflow-hidden">
+              <button 
+                className="w-full flex justify-between items-center p-4 text-left bg-gray-50 hover:bg-gray-100 transition-colors !rounded-button cursor-pointer whitespace-nowrap"
+                onClick={() => toggleAccordion(0)}
+              >
+                <span className="font-medium text-gray-900">How accurate is DocTech&apos;s AI diagnosis?</span>
+                <i className={`fas ${isAccordionOpen === 0 ? 'fa-chevron-up' : 'fa-chevron-down'} text-blue-600`}></i>
+              </button>
+              <div className={`p-4 bg-white ${isAccordionOpen === 0 ? 'block' : 'hidden'}`}>
+                <p className="text-gray-700">
+                  DocTech&apos;s AI has been trained on millions of device repair scenarios and achieves a 95% accuracy rate in diagnosing common issues. For complex problems, the AI will suggest multiple possible causes and guide you through testing each one systematically.
+                </p>
+              </div>
+            </div>
+            
+            {/* FAQ Item 2 */}
+            <div className="border border-gray-200 rounded-lg overflow-hidden">
+              <button 
+                className="w-full flex justify-between items-center p-4 text-left bg-gray-50 hover:bg-gray-100 transition-colors !rounded-button cursor-pointer whitespace-nowrap"
+                onClick={() => toggleAccordion(1)}
+              >
+                <span className="font-medium text-gray-900">Is DocTech free to use?</span>
+                <i className={`fas ${isAccordionOpen === 1 ? 'fa-chevron-up' : 'fa-chevron-down'} text-blue-600`}></i>
+              </button>
+              <div className={`p-4 bg-white ${isAccordionOpen === 1 ? 'block' : 'hidden'}`}>
+                <p className="text-gray-700">
+                  Yes! DocTech offers a free plan that includes basic diagnostics and repair guides. For advanced features like unlimited diagnostics, priority support, and detailed repair history tracking, we offer premium subscriptions starting at $4.99/month.
+                </p>
+              </div>
+            </div>
+            
+            {/* FAQ Item 3 */}
+            <div className="border border-gray-200 rounded-lg overflow-hidden">
+              <button 
+                className="w-full flex justify-between items-center p-4 text-left bg-gray-50 hover:bg-gray-100 transition-colors !rounded-button cursor-pointer whitespace-nowrap"
+                onClick={() => toggleAccordion(2)}
+              >
+                <span className="font-medium text-gray-900">What devices does DocTech support?</span>
+                <i className={`fas ${isAccordionOpen === 2 ? 'fa-chevron-up' : 'fa-chevron-down'} text-blue-600`}></i>
+              </button>
+              <div className={`p-4 bg-white ${isAccordionOpen === 2 ? 'block' : 'hidden'}`}>
+                <p className="text-gray-700">
+                  DocTech currently supports Windows PCs, Macs, Android phones, iPhones, and most popular laptop models. We&apos;re constantly expanding our knowledge base to include more devices and specialized equipment.
+                </p>
+              </div>
+            </div>
+            
+            {/* FAQ Item 4 */}
+            <div className="border border-gray-200 rounded-lg overflow-hidden">
+              <button 
+                className="w-full flex justify-between items-center p-4 text-left bg-gray-50 hover:bg-gray-100 transition-colors !rounded-button cursor-pointer whitespace-nowrap"
+                onClick={() => toggleAccordion(3)}
+              >
+                <span className="font-medium text-gray-900">Is my device data secure with DocTech?</span>
+                <i className={`fas ${isAccordionOpen === 3 ? 'fa-chevron-up' : 'fa-chevron-down'} text-blue-600`}></i>
+              </button>
+              <div className={`p-4 bg-white ${isAccordionOpen === 3 ? 'block' : 'hidden'}`}>
+                <p className="text-gray-700">
+                  Absolutely. We take your privacy seriously. Any images or information you share with DocTech are encrypted and only used to diagnose your specific issue. We never share your data with third parties, and you can delete your repair history at any time.
+                </p>
+              </div>
+            </div>
+            
+            {/* FAQ Item 5 */}
+            <div className="border border-gray-200 rounded-lg overflow-hidden">
+              <button 
+                className="w-full flex justify-between items-center p-4 text-left bg-gray-50 hover:bg-gray-100 transition-colors !rounded-button cursor-pointer whitespace-nowrap"
+                onClick={() => toggleAccordion(4)}
+              >
+                <span className="font-medium text-gray-900">What if DocTech can&apos;t fix my problem?</span>
+                <i className={`fas ${isAccordionOpen === 4 ? 'fa-chevron-up' : 'fa-chevron-down'} text-blue-600`}></i>
+              </button>
+              <div className={`p-4 bg-white ${isAccordionOpen === 4 ? 'block' : 'hidden'}`}>
+                <p className="text-gray-700">
+                  If our AI can&apos;t resolve your issue, we&apos;ll connect you with our community of tech experts who can provide additional assistance. For premium users, we also offer direct support from certified technicians who can help with complex problems.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-600 text-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
+            <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+              Subscribe to our newsletter for the latest updates, tips, and special offers
+            </p>
+          </div>
+          
+          <div className="max-w-md mx-auto">
+            <form className="flex flex-col sm:flex-row gap-4">
+              <input 
+                type="email" 
+                placeholder="Enter your email" 
+                className="flex-grow py-3 px-4 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 border-none"
+              />
+              <button className="bg-blue-800 hover:bg-blue-900 py-3 px-6 rounded-lg transition-colors !rounded-button cursor-pointer whitespace-nowrap">
+                Subscribe
+              </button>
+            </form>
+            <p className="text-sm text-blue-200 mt-4 text-center">
+              We respect your privacy. Unsubscribe at any time.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-4">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
-          <div>
-            <h3 className="text-xl font-bold mb-4">AI Device Repair</h3>
-            <p className="text-gray-400">Next-generation device repairs powered by artificial intelligence</p>
+      <footer className="bg-gray-900 text-gray-400 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <h3 className="text-xl font-bold text-white mb-4">DocTech</h3>
+              <p className="mb-4">
+                AI-powered device repair assistant that helps you diagnose and fix your tech problems instantly.
+              </p>
+              <div className="flex space-x-4">
+                <a href="#" className="text-gray-400 hover:text-white transition-colors cursor-pointer">
+                  <i className="fab fa-twitter text-xl"></i>
+                </a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors cursor-pointer">
+                  <i className="fab fa-facebook text-xl"></i>
+                </a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors cursor-pointer">
+                  <i className="fab fa-instagram text-xl"></i>
+                </a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors cursor-pointer">
+                  <i className="fab fa-youtube text-xl"></i>
+                </a>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
+              <ul className="space-y-2">
+                <li><a href="#features" className="hover:text-white transition-colors cursor-pointer">Features</a></li>
+                <li><a href="#how-it-works" className="hover:text-white transition-colors cursor-pointer">How It Works</a></li>
+                <li><a href="#testimonials" className="hover:text-white transition-colors cursor-pointer">Testimonials</a></li>
+                <li><a href="#faq" className="hover:text-white transition-colors cursor-pointer">FAQ</a></li>
+                <li><a href="#download" className="hover:text-white transition-colors cursor-pointer">Download</a></li>
+              </ul>
+            </div>
+            
+        
+            
           </div>
-          <div>
-            <h4 className="text-lg font-semibold mb-3">Services</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li>AI Diagnostics</li>
-              <li>Hardware Repair</li>
-              <li>Software Solutions</li>
-              <li>Business IT Support</li>
-            </ul>
+          
+          <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p>&copy; 2025 DocTech. All rights reserved.</p>
+            
           </div>
-          <div>
-            <h4 className="text-lg font-semibold mb-3">Company</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li>About Us</li>
-              <li>Careers</li>
-              <li>Blog</li>
-              <li>Press</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-lg font-semibold mb-3">Connect</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li>
-            <a href="https://github.com/Epheyhertz" className="text-gray-400 hover:text-white transition-colors duration-300">
-                <span className="sr-only">GitHub</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
-                </svg>
-              </a>
-           </li>
-              <li>
-              <a href="https://www.linkedin.com/in/ephey-nyaga-357515338/" className="text-gray-400 hover:text-white transition-colors duration-300">
-                <span className="sr-only">LinkedIn</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M16.98 2a2 2 0 012 2v16a2 2 0 01-2 2h-11a2 2 0 01-2-2V4a2 2 0 012-2h11zM12 7a3 3 0 100 6 3 3 0 000-6zM7 15a1 1 0 011-1h8a1 1 0 110 2H8a1 1 0 01-1-1zM8 7a1 1 0 100 2h.01a1 1 0 100-2H8z" />
-                </svg>
-              </a>
-            </li>
-             
-            </ul>
-          </div>
-        </div>
-        <div className="max-w-6xl mx-auto mt-12 pt-6 border-t border-gray-800 text-center text-gray-500">
-          <p>© {new Date().getFullYear()} AI Device Repair. All rights reserved.</p>
         </div>
       </footer>
-
     </div>
   );
 }
+
+export default App;
+
