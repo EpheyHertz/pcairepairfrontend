@@ -1,10 +1,10 @@
-// The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work.
 'use client'
 import React, { useState, useEffect } from 'react';
 
-const App =() => {
+const Home = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isAccordionOpen, setIsAccordionOpen] = useState(null);
+  const [showQRCode, setShowQRCode] = useState(false);
 
   const toggleAccordion = (index) => {
     setIsAccordionOpen(isAccordionOpen === index ? null : index);
@@ -19,29 +19,6 @@ const App =() => {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
-      {/* Navigation */}
-      {/* <nav className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center">
-              <div className="text-2xl font-bold text-blue-600">DocTech</div>
-            </div>
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">Features</a>
-              <a href="#how-it-works" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">How It Works</a>
-              <a href="#testimonials" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">Testimonials</a>
-              <a href="#faq" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">FAQ</a>
-              <a href="#download" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">Download</a>
-            </div>
-            <div className="md:hidden flex items-center">
-              <button className="text-gray-700 hover:text-blue-600 focus:outline-none !rounded-button cursor-pointer whitespace-nowrap">
-                <i className="fas fa-bars text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav> */}
-
       {/* Hero Section */}
       <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{
         backgroundImage: `url('https://readdy.ai/api/search-image?query=Modern%20tech%20background%20with%20gradient%20blue%20to%20dark%20blue%2C%20abstract%20digital%20pattern%20with%20subtle%20tech%20elements%2C%20clean%20professional%20look%20for%20AI%20app%20landing%20page%2C%20high%20quality%20digital%20art&width=1440&height=800&seq=1&orientation=landscape')`,
@@ -61,11 +38,26 @@ const App =() => {
                 <button className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-8 rounded-lg shadow-lg transition-all transform hover:scale-105 !rounded-button cursor-pointer whitespace-nowrap" onClick={() => window.open('https://play.google.com/store/apps/details?id=app.vercel.pcairepair', '_blank')}>
                   <i className="fas fa-download mr-2"></i> Download the App
                 </button>
-                <button className="bg-transparent border-2 border-white text-white py-3 px-8 rounded-lg hover:bg-white hover:text-blue-600 transition-all transform hover:scale-105 !rounded-button cursor-pointer whitespace-nowrap">
+                <button 
+                  className="bg-transparent border-2 border-white text-white py-3 px-8 rounded-lg hover:bg-white hover:text-blue-600 transition-all transform hover:scale-105 !rounded-button cursor-pointer whitespace-nowrap relative"
+                  onClick={() => setShowQRCode(!showQRCode)}
+                  onMouseEnter={() => setShowQRCode(true)}
+                  onMouseLeave={() => setShowQRCode(false)}
+                >
                   <i className="fas fa-qrcode mr-2"></i> Scan QR Code
+                  {showQRCode && (
+                    <div className="absolute z-50 bottom-full left-1/2 transform -translate-x-1/2 mb-4 p-2 bg-white rounded-lg shadow-2xl">
+                      <div className="text-black text-center text-sm font-semibold mb-1">Scan QR Code</div>
+                      <img 
+                        src="/images/qrcode.png" 
+                        alt="QR Code" 
+                        className="w-40 h-40 object-cover"
+                      />
+                    </div>
+                  )}
                 </button>
               </div>
-              <div className="mt-8 p-4 bg-white/20 backdrop-blur-sm rounded-lg inline-block">
+              <div className="mt-8 p-4 bg-white/20 backdrop-blur-sm rounded-lg inline-block hidden md:block">
                 <img 
                   src="/images/qrcode.png" 
                   alt="QR Code" 
@@ -100,7 +92,7 @@ const App =() => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 md:gap-8">
             {/* Feature 1 */}
             <div className="bg-white rounded-xl shadow-md p-6 transition-all hover:shadow-lg hover:transform hover:scale-105">
               <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600">
@@ -222,7 +214,7 @@ const App =() => {
                 Get instant access to our AI-powered repair assistant and start fixing your devices right away.
               </p>
               
-              <div className="bg-white/20 backdrop-blur-sm p-8 rounded-xl inline-block mb-8">
+              <div className="bg-white/20 backdrop-blur-sm p-8 rounded-xl inline-block mb-8 hidden md:block">
                 <img 
                   src="/images/qrcode.png" 
                   alt="Download QR Code" 
@@ -277,7 +269,7 @@ const App =() => {
                       </div>
                     </div>
                     <p className="text-gray-700 text-lg italic mb-6">
-                      &quot;DocTech found the problem with my laptop just from a picture of the error screen! The step-by-step repair guide was so easy to follow. Fixed it myself in 20 minutes!&quote;
+                      &quot;DocTech found the problem with my laptop just from a picture of the error screen! The step-by-step repair guide was so easy to follow. Fixed it myself in 20 minutes!&quot;
                     </p>
                     <div className="flex items-center">
                       <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4 text-blue-600">
@@ -304,7 +296,7 @@ const App =() => {
                       </div>
                     </div>
                     <p className="text-gray-700 text-lg italic mb-6">
-                      &quote;Way faster than any repair shop I&apos;ve used! My phone had been freezing constantly, and DocTech diagnosed a memory issue in seconds. Followed the cleanup steps and it&apos;s working perfectly now.&quote;
+                      &quot;Way faster than any repair shop I&apos;ve used! My phone had been freezing constantly, and DocTech diagnosed a memory issue in seconds. Followed the cleanup steps and it&apos;s working perfectly now.&quot;
                     </p>
                     <div className="flex items-center">
                       <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4 text-blue-600">
@@ -331,7 +323,7 @@ const App =() => {
                       </div>
                     </div>
                     <p className="text-gray-700 text-lg italic mb-6">
-                    &quote;I was quoted $200 for a simple laptop repair. DocTech helped me fix it myself for free! The AI explained everything in simple terms and guided me through each step. Incredible service!&quote;
+                    &quot;I was quoted $200 for a simple laptop repair. DocTech helped me fix it myself for free! The AI explained everything in simple terms and guided me through each step. Incredible service!&quot;
                     </p>
                     <div className="flex items-center">
                       <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4 text-blue-600">
@@ -368,27 +360,27 @@ const App =() => {
           </div>
           
           {/* Statistics */}
-          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl shadow-md p-8 text-center">
-              <div className="text-5xl font-bold text-blue-600 mb-4">50K+</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Successful Diagnoses</h3>
-              <p className="text-gray-600">
+          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div className="bg-white rounded-xl shadow-md p-6 md:p-8 text-center">
+              <div className="text-4xl md:text-5xl font-bold text-blue-600 mb-4">50K+</div>
+              <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">Successful Diagnoses</h3>
+              <p className="text-gray-600 text-sm md:text-base">
                 Devices diagnosed and repaired with our AI assistant
               </p>
             </div>
             
-            <div className="bg-white rounded-xl shadow-md p-8 text-center">
-              <div className="text-5xl font-bold text-blue-600 mb-4">95%</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Success Rate</h3>
-              <p className="text-gray-600">
+            <div className="bg-white rounded-xl shadow-md p-6 md:p-8 text-center">
+              <div className="text-4xl md:text-5xl font-bold text-blue-600 mb-4">95%</div>
+              <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">Success Rate</h3>
+              <p className="text-gray-600 text-sm md:text-base">
                 Of users successfully repair their devices with our guidance
               </p>
             </div>
             
-            <div className="bg-white rounded-xl shadow-md p-8 text-center">
-              <div className="text-5xl font-bold text-blue-600 mb-4">100%</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Secure & Private</h3>
-              <p className="text-gray-600">
+            <div className="bg-white rounded-xl shadow-md p-6 md:p-8 text-center">
+              <div className="text-4xl md:text-5xl font-bold text-blue-600 mb-4">100%</div>
+              <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">Secure & Private</h3>
+              <p className="text-gray-600 text-sm md:text-base">
                 Your device data is always protected and never shared
               </p>
             </div>
@@ -553,14 +545,13 @@ const App =() => {
                 <li><a href="#download" className="hover:text-white transition-colors cursor-pointer">Download</a></li>
               </ul>
             </div>
-            
-        
-            
+
+           
           </div>
           
           <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p>&copy; 2025 DocTech. All rights reserved.</p>
-            
+           
           </div>
         </div>
       </footer>
@@ -568,5 +559,4 @@ const App =() => {
   );
 }
 
-export default App;
-
+export default Home;
